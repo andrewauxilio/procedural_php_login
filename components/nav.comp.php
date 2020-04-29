@@ -9,14 +9,16 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
+                <?php if(isset($_SESSION['user_id'])) : ?>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Dashboard</a>
+                    <a class="nav-link" href="dashboard.php">Dashboard</a>
                 </li>
+                <?php endif; ?>
             </ul>
-            <form action="" method="POST" class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="email" placeholder="email">
-                <input class="form-control mr-sm-2" type="password" placeholder="password">
-                <button class="btn btn-light my-2 my-sm-0" type="submit">Login</button>
+            <form action="functions/login.func.php" method="POST" class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" name="usermail" type="text" placeholder="username or email">
+                <input class="form-control mr-sm-2" name="password" type="password" placeholder="password">
+                <button class="btn btn-light my-2 my-sm-0" name="login-submit" type="submit">Login</button>
             </form>
             <a class="btn btn-light my-2 my-sm-0 ml-2" href="register.php">Register</a>
         </div>

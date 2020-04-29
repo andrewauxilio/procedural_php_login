@@ -41,7 +41,7 @@ if (isset($_POST['register-submit']))
     //If invalid email AND username characters, throw error.
     else if (!filter_var($email, FILTER_VALIDATE_EMAIL) && !preg_match("/^[a-zA-Z0-9]*$/", $username))
     {
-        header("Location: ../register.php?error=invalidusernameemail=");
+        header("Location: ../register.php?error=invalidusernameemail");
         exit();
     }
     //If invalid username characters, throw error.
@@ -69,14 +69,18 @@ if (isset($_POST['register-submit']))
      //If no error is thrown, start preparing to execute SQL query.
     else
     {
-        $sql = "SELECT username FROM users WHERE username=? OR email=?";
+        //QUERY = see if username and email exists in the database.
+        $sql = "SELECT username AND email FROM users WHERE username=? OR email=?";
+        //Initializes a statement and returns an object suitable for mysqli_stmt_prepare().
         $stmt = mysqli_stmt_init($conn);
 
+        //If there is an error in the SQL query or database connection, throw an error.
         if (!mysqli_stmt_prepare($stmt, $sql))
         {
             header("Location: ../register.php?error=sqlerror&");
             exit(); 
         }
+        //Check if username and/or email exists in database using user inputs.
         else
         {
             mysqli_stmt_bind_param($stmt, "ss", $username, $email);
@@ -84,11 +88,14 @@ if (isset($_POST['register-submit']))
             mysqli_stmt_store_result($stmt);
             $resultCheck = mysqli_stmt_num_rows($stmt);
 
+            //If a row is returned from the SQL query, throw an error.
+            //Username OR email has already been taken.
             if ($resultCheck > 0)
             {
                 header("Location: ../register.php?error=usernameemailtaken&username=".$username."email=".$email);
                 exit();
             }
+            //If no row is returned, continue the registration process.
             else
             {
                 $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
