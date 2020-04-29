@@ -15,11 +15,20 @@
                 </li>
                 <?php endif; ?>
             </ul>
+            <?php if(!isset($_SESSION['user_id'])) : ?>
             <form action="functions/login.func.php" method="POST" class="form-inline my-2 my-lg-0">
                 <input class="form-control mr-sm-2" name="usermail" type="text" placeholder="username or email">
                 <input class="form-control mr-sm-2" name="password" type="password" placeholder="password">
                 <button class="btn btn-light my-2 my-sm-0" name="login-submit" type="submit">Login</button>
             </form>
-            <a class="btn btn-light my-2 my-sm-0 ml-2" href="register.php">Register</a>
+            <?php endif; ?>
+
+            <?php if(!isset($_SESSION['user_id'])) : ?>
+            <button class="btn btn-light my-2 my-sm-0 ml-2" href="register.php">Register</button>
+            <?php else: ?>
+            <form action="functions/logout.func.php" method="POST">
+                <button class="btn btn-light my-2 my-sm-0 ml-2" name="logout-submit" type="submit">Logout</button>
+            </form>
+            <?php endif; ?>
         </div>
     </nav>
